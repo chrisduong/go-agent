@@ -4,7 +4,7 @@
 FROM dockerfile/java
 MAINTAINER ChrisD 
 
-ENV DOWNLOAD_URL http://download.go.cd/gocd-deb/go-agent-14.3.0-1186.deb
+ENV DOWNLOAD_URL http://download01.thoughtworks.com/go/14.1.0/ga/go-agent-14.1.0-18882.deb
 
 RUN wget -O /tmp/go-agent.deb $DOWNLOAD_URL
 RUN dpkg -i /tmp/go-agent.deb
