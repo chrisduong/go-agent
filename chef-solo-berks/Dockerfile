@@ -1,21 +1,13 @@
 # This file creates a container that contains chef-client and berkshelf
-# 
+# Use cookbook wrapper technique to deploy
 # Author: Chris Duong
-# Date: 11/03/2014
+# Date: 11/23/2014
 
 
-FROM chef/ubuntu-14.04
+FROM chrisduong/chef-solo-berks:0.0.7
 MAINTAINER ChrisD
 
-# Install chef and its prerequisites
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-      git \
-      build-essential \
-      libxml2-dev \
-      libxslt-dev && \
-    apt-get install -y --no-install-recommends && \
-    apt-get clean && \
-    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
-RUN echo 'gem: --no-ri --no-rdoc' > ~/.gemrc && \
- 	/opt/chef/embedded/bin/gem install berkshelf &&  rm -rf /tmp/* /var/tmp/*
+# Prepare CHEF
+RUN mkdir -p /chef/cookbooks; \
+	echo "cookbook_path \"/chef/cookbooks\" "  > /chef/solo.rb; 
+COPY solo.json /chef/
