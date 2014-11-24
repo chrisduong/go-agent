@@ -1,14 +1,14 @@
 
 # Dockerfile for ThoughtWorks Go Agent (http://www.go.cd)
 
-FROM dockerfile/java
-MAINTAINER ChrisD 
+FROM dockerfile/java:oracle-java7
+MAINTAINER Chris Duong "chris.duong83@gmail.com"
 
-ENV DOWNLOAD_URL http://download01.thoughtworks.com/go/14.1.0/ga/go-agent-14.1.0-18882.deb
-
-RUN wget -O /tmp/go-agent.deb $DOWNLOAD_URL
-RUN dpkg -i /tmp/go-agent.deb
-RUN rm -f /tmp/go-agent.deb
+# Download and install go-agent
+ENV VERSION 14.3.0-1186
+RUN curl -L -o /tmp/go-agent-${VERSION}.deb http://download.go.cd/gocd-deb/go-agent-${VERSION}.deb; \
+	dpkg -i /tmp/go-agent-${VERSION}.deb; \
+	rm -f /tmp/go-agent-${VERSION}.deb
 
 # get rid of GO_SERVER AND GO_SERVER_PORT defaults. We'll use env variables.
 RUN sed -i '/.*GO_SERVER.*/d' /etc/default/go-agent
