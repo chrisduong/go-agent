@@ -6,7 +6,7 @@ MAINTAINER Chris Duong "chris.duong83@gmail.com"
 
 # Download and install go-agent
 ENV VERSION 14.3.0-1186
-ENV GO_SERVER=go-server
+ENV GO_SERVER go-server
 RUN curl -L -o /tmp/go-agent-${VERSION}.deb http://download.go.cd/gocd-deb/go-agent-${VERSION}.deb; \
 	dpkg -i /tmp/go-agent-${VERSION}.deb; \
 	rm -f /tmp/go-agent-${VERSION}.deb
