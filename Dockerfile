@@ -10,16 +10,10 @@ RUN curl -L -o /tmp/go-agent-${VERSION}.deb http://download.go.cd/gocd-deb/go-ag
 	dpkg -i /tmp/go-agent-${VERSION}.deb; \
 	rm -f /tmp/go-agent-${VERSION}.deb
 
-# get rid of GO_SERVER AND GO_SERVER_PORT defaults. We'll use env variables.
-RUN sed -i '/.*GO_SERVER.*/d' /etc/default/go-agent
+#set GO_SERVER address (defined in /etc/hosts)
+RUN sed -i 's/^\(GO_SERVER=\s*\).*$/\1go-server/' /etc/default/go-agent; \
+	sed -i 's/DAEMON=Y/DAEMON=N/' /etc/default/go-agent; \
+	# make sure that init.d script passes through environment variables
+	sed -i 's/su -/su -p/' /etc/init.d/go-agent
 
-# make sure container doesn't exit after starting agent
-RUN sed -i 's/DAEMON=Y/DAEMON=N/' /etc/default/go-agent
-
-# make sure that init.d script passes through environment variables
-RUN sed -i 's/su -/su -p/' /etc/init.d/go-agent
-
-# set GO_SERVER env variable to go-server (defined in /etc/hosts)
-ENV GO_SERVER go-server
-
-CMD su go -c '/etc/init.d/go-agent start'
+ENTRYPOINT ["/etc/init.d/go-agent", "start"]
